@@ -45,25 +45,6 @@
 #define NO_ERROR 0
 #define SCD30_I2C_ADDR_61 0x61
 
-typedef enum {
-    START_PERIODIC_MEASUREMENT_CMD_ID = 0x10,
-    STOP_PERIODIC_MEASUREMENT_CMD_ID = 0x104,
-    SET_MEASUREMENT_INTERVAL_CMD_ID = 0x4600,
-    GET_MEASUREMENT_INTERVAL_CMD_ID = 0x4600,
-    GET_DATA_READY_CMD_ID = 0x202,
-    READ_MEASUREMENT_DATA_CMD_ID = 0x300,
-    ACTIVATE_AUTO_CALIBRATION_CMD_ID = 0x5306,
-    GET_AUTO_CALIBRATION_STATUS_CMD_ID = 0x5306,
-    FORCE_RECALIBRATION_CMD_ID = 0x5204,
-    GET_FORCE_RECALIBRATION_STATUS_CMD_ID = 0x5204,
-    SET_TEMPERATURE_OFFSET_CMD_ID = 0x5403,
-    GET_TEMPERATURE_OFFSET_CMD_ID = 0x5403,
-    GET_ALTITUDE_COMPENSATION_CMD_ID = 0x5102,
-    SET_ALTITUDE_COMPENSATION_CMD_ID = 0x5102,
-    READ_FIRMWARE_VERSION_CMD_ID = 0xd100,
-    SOFT_RESET_CMD_ID = 0xd304,
-} CmdId;
-
 class SensirionI2cScd30 {
   public:
     SensirionI2cScd30();
@@ -182,6 +163,21 @@ class SensirionI2cScd30 {
      */
     int16_t readMeasurementData(float& co2Concentration, float& temperature,
                                 float& humidity);
+
+    /**
+     * @brief Read out the raw measurement values
+     *
+     * Allows to read new measurement data if data is available.
+     *
+     * @param[out] co2Concentration
+     * @param[out] temperature
+     * @param[out] humidity
+     * @param[out] co2ConcentrationRaw
+     *
+     * @return error_code 0 on success, an error code otherwise.
+     */
+    int16_t readRawMeasurementData(float& co2Concentration, float& temperature,
+                                   float& humidity, float& co2ConcentrationRaw);
 
     /**
      * @brief Activates or deactivates continuous automatic self calibration.

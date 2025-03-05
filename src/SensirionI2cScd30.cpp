@@ -187,6 +187,35 @@ int16_t SensirionI2cScd30::readMeasurementData(float& co2Concentration,
     return localError;
 }
 
+int16_t SensirionI2cScd30::readRawMeasurementData(float& co2Concentration,
+                                                  float& temperature,
+                                                  float& humidity,
+                                                  float& co2ConcentrationRaw) {
+    int16_t localError = NO_ERROR;
+    uint8_t local_buffer[30] = {0};
+    SensirionI2CTxFrame txFrame = SensirionI2CTxFrame::createWithUInt16Command(
+        0x300, local_buffer, sizeof local_buffer);
+    float unused;
+    localError =
+        SensirionI2CCommunication::sendFrame(_i2cAddress, txFrame, *_i2cBus);
+    if (localError != NO_ERROR) {
+        return localError;
+    }
+    delay(10);
+    SensirionI2CRxFrame rxFrame(local_buffer, sizeof local_buffer);
+    localError = SensirionI2CCommunication::receiveFrame(_i2cAddress, 30,
+                                                         rxFrame, *_i2cBus);
+    if (localError != NO_ERROR) {
+        return localError;
+    }
+    localError |= rxFrame.getFloat(co2Concentration);
+    localError |= rxFrame.getFloat(temperature);
+    localError |= rxFrame.getFloat(humidity);
+    localError |= rxFrame.getFloat(unused);
+    localError |= rxFrame.getFloat(co2ConcentrationRaw);
+    return localError;
+}
+
 int16_t SensirionI2cScd30::activateAutoCalibration(uint16_t doActivate) {
     int16_t localError = NO_ERROR;
     uint8_t local_buffer[5] = {0};
