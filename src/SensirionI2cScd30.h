@@ -177,7 +177,7 @@ class SensirionI2cScd30 {
      * @return error_code 0 on success, an error code otherwise.
      */
     int16_t readRawMeasurementData(float& co2Concentration, float& temperature,
-                                   float& humidity, float& co2ConcentrationRaw);
+                                   float& humidity, uint32_t& co2ConcentrationRaw);
 
     /**
      * @brief Activates or deactivates continuous automatic self calibration.

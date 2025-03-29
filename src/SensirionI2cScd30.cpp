@@ -190,7 +190,7 @@ int16_t SensirionI2cScd30::readMeasurementData(float& co2Concentration,
 int16_t SensirionI2cScd30::readRawMeasurementData(float& co2Concentration,
                                                   float& temperature,
                                                   float& humidity,
-                                                  float& co2ConcentrationRaw) {
+                                                  uint32_t& co2ConcentrationRaw) {
     int16_t localError = NO_ERROR;
     uint8_t local_buffer[30] = {0};
     SensirionI2CTxFrame txFrame = SensirionI2CTxFrame::createWithUInt16Command(
@@ -212,7 +212,7 @@ int16_t SensirionI2cScd30::readRawMeasurementData(float& co2Concentration,
     localError |= rxFrame.getFloat(temperature);
     localError |= rxFrame.getFloat(humidity);
     localError |= rxFrame.getFloat(unused);
-    localError |= rxFrame.getFloat(co2ConcentrationRaw);
+    localError |= rxFrame.getUInt32(co2ConcentrationRaw);
     return localError;
 }
 
